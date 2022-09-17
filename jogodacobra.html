@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo da cobrinha</title>
+<style>
+body{
+background-color:#E0E0E0;
+font-family: monospace;
+}
+</style>
+
+</head>
+<body>
+<center>
+    <h4>Jogo da Cobrinha</h4>
+ 
+    <canvas id="tabuleiro" width="600" height="600"></canvas>
+    <script type="text/javascript">
+        //canvas: é um tabuleiro de pixels.Container para gráficos. Criar desenhos
+
+	  // window.onload: executa funcao e java somente após o carregamento da pagina
+        window.onload = function(){
+
+		// getElementById: retorna a referência do elemento através do seu ID na tag canvas.
+            var palco = document.getElementById('tabuleiro');
+
+	      //getContext: define a parte visual, cria um objeto 2D
+            var contexto = palco.getContext("2d");
+            
+		//addEventListener: Adicione um evento de clique a um elemento
+		document.addEventListener("keydown", click);
+
+		//setInterval: programa a execução da ação por milisegundos
+            setInterval(game, 120);
+ 
+            var casaAnda = 1;
+ 
+            var velocidadeCobraX = velocidadeCobraY = 0;
+            var posicaoCobraX = posicaoCobraY = 10;
+            var tamanhoPixel = 30;
+            var qtdadePixel = 20;
+            var posicaoRatoX=posicaoRatoY=15;
+ 
+            var rastroCobra = [];
+            caldaCobra = 3;
+ 
+            function game(){
+                posicaoCobraX += velocidadeCobraX;
+                posicaoCobraY += velocidadeCobraY;
+                if (posicaoCobraX <0) {
+                    posicaoCobraX = qtdadePixel-1;
+                }
+                if (posicaoCobraX > qtdadePixel-1) {
+                    posicaoCobraX = 0;
+                }
+                if (posicaoCobraY < 0) {
+                    posicaoCobraY = qtdadePixel-1;
+                }
+                if (posicaoCobraY > qtdadePixel-1) {
+                    posicaoCobraY = 0;
+                }
+ 
+		    // fillStyle: pintar e estilizar o container, especifica a cor ou o estilo para usar regiões internas
+                contexto.fillStyle = "black";
+		    //desenha um retângulo na posição (x,y), no qual o tamanho é determinado pela width (largura)e pela height (altura),e cujo o estilo é determinado pelo atributo fillStyle.
+                contexto.fillRect(0,0, palco.width, palco.height);
+ 
+                contexto.fillStyle = "red";
+                contexto.fillRect(posicaoRatoX*tamanhoPixel, posicaoRatoY*tamanhoPixel, tamanhoPixel,tamanhoPixel);
+ 
+                contexto.fillStyle = "gray";
+                for (var i = 0; i < rastroCobra.length; i++) {
+                    contexto.fillRect(rastroCobra[i].x*tamanhoPixel, rastroCobra[i].y*tamanhoPixel, tamanhoPixel-1,tamanhoPixel-1);
+                    if (rastroCobra[i].x == posicaoCobraX && rastroCobra[i].y == posicaoCobraY)
+                    {
+                        velocidadeCobraX = velocidadeCobraY=0;
+                        caldaCobra =3;
+                    }
+                }
+
+			
+ 		    //.push: adiciona um ou mais elementos ao final de um array e retorna o novo cumprimento desse array.
+                rastroCobra.push({x:posicaoCobraX,y:posicaoCobraY })
+                while (rastroCobra.length > caldaCobra) {
+                    rastroCobra.shift();
+                }
+ 
+                if (posicaoRatoX==posicaoCobraX && posicaoRatoY==posicaoCobraY){
+                    caldaCobra++;
+			  //Math.floor: arredonda um número PARA BAIXO para o inteiro mais próximo
+                    posicaoRatoX = Math.floor(Math.random()*qtdadePixel);
+			  // Math.random: Retorna um número aleatório
+                    posicaoRatoY = Math.floor(Math.random()*qtdadePixel);
+                }
+ 
+            }
+ 
+            function click(event){
+ 
+                switch (event.keyCode) {
+                    case 37: // Left
+                        velocidadeCobraX = -casaAnda;
+                        velocidadeCobraY = 0;
+                        break;
+                    case 38: // up
+                        velocidadeCobraX = 0;
+                        velocidadeCobraY = -casaAnda;
+                        break;
+                    case 39: // right
+                        velocidadeCobraX = casaAnda;
+                        velocidadeCobraY = 0;
+                        break;
+                    case 40: // down
+                        velocidadeCobraX = 0;
+                        velocidadeCobraY = casaAnda;
+                        break;          
+                    default:
+                        
+                        break;
+                }
+ 
+ 
+            }
+ 
+        }
+ 
+        </script>
+        <h6>Criador: Joao Felipe Gonçalves de Arruda Alcantara.</h6>
+        </center>
+    </body>
+</html>
